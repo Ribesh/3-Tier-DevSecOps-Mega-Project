@@ -88,7 +88,19 @@ spec:
           - worker1   # replace with your node name
 
 ---
-
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  labels:
+    app: mysql
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 
 ---
 apiVersion: apps/v1
@@ -134,12 +146,16 @@ spec:
         - name: initdb
           configMap:
             name: mysql-initdb-config
-  volumeClaimTemplates:
-    - metadata:
-        name: mysql-persistent-storage
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        storageClassName: local-storage
-        resources:
-          requests:
-            storage: 5Gi
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+            
+  # volumeClaimTemplates:
+  #   - metadata:
+  #       name: mysql-persistent-storage
+  #     spec:
+  #       accessModes: [ "ReadWriteOnce" ]
+  #       storageClassName: local-storage
+  #       resources:
+  #         requests:
+  #           storage: 5Gi
