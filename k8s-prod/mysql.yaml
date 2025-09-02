@@ -61,6 +61,35 @@ spec:
     - port: 3306
       targetPort: 3306
 
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    app: mysql
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /mnt/disks/vol1
+  nodeAffinity:             # ensure Pod is scheduled on the node with this path
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - worker1   # replace with your node name
+
+---
+
+
 ---
 apiVersion: apps/v1
 kind: StatefulSet
