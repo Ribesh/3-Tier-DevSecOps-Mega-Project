@@ -6,7 +6,7 @@ metadata:
   namespace: prod
   labels:
     app: mysql
-type: Opaque
+#type: Opaque
 stringData:
   MYSQL_ROOT_PASSWORD: Aditya
 
