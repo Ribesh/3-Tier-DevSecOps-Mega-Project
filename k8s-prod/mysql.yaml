@@ -8,7 +8,7 @@ metadata:
     app: mysql
 type: Opaque
 stringData:
-  MYSQL_ROOT_PASSWORD: P@ssw0rd01
+  MYSQL_ROOT_PASSWORD: Aditya
 
 ---
 apiVersion: v1
@@ -62,46 +62,6 @@ spec:
       targetPort: 3306
 
 ---
-
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mysql-pv
-  labels:
-    app: mysql
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
-  storageClassName: local-storage
-  local:
-    path: /mnt/disk/vol1
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - worker1
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-pvc
-  namespace: prod
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
-  storageClassName: local-storage
-
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -145,10 +105,15 @@ spec:
         - name: initdb
           configMap:
             name: mysql-initdb-config
-        - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: mysql-pvc
-
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-persistent-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: ebs-sc
+        resources:
+          requests:
+            storage: 5Gi
 
 # ---
 # apiVersion: v1
@@ -213,8 +178,8 @@ spec:
 #     - port: 3306
 #       targetPort: 3306
 
-
 # ---
+
 # apiVersion: v1
 # kind: PersistentVolume
 # metadata:
@@ -226,33 +191,32 @@ spec:
 #     storage: 5Gi
 #   accessModes:
 #     - ReadWriteOnce
-#   storageClassName: local-storage
 #   persistentVolumeReclaimPolicy: Delete
+#   storageClassName: local-storage
 #   local:
-#     path: /mnt/disks/vol1
-#   nodeAffinity:             # ensure Pod is scheduled on the node with this path
+#     path: /mnt/disk/vol1
+#   nodeAffinity:
 #     required:
 #       nodeSelectorTerms:
 #       - matchExpressions:
 #         - key: kubernetes.io/hostname
 #           operator: In
 #           values:
-#           - worker1   # replace with your node name
+#           - worker1
 
 # ---
 # apiVersion: v1
 # kind: PersistentVolumeClaim
 # metadata:
 #   name: mysql-pvc
-#   labels:
-#     app: mysql
+#   namespace: prod
 # spec:
-#   storageClassName: local-storage
 #   accessModes:
 #     - ReadWriteOnce
 #   resources:
 #     requests:
 #       storage: 5Gi
+#   storageClassName: local-storage
 
 # ---
 # apiVersion: apps/v1
@@ -298,16 +262,6 @@ spec:
 #         - name: initdb
 #           configMap:
 #             name: mysql-initdb-config
-#         - name: mysql-storage
+#         - name: mysql-persistent-storage
 #           persistentVolumeClaim:
 #             claimName: mysql-pvc
-            
-#   # volumeClaimTemplates:
-#   #   - metadata:
-#   #       name: mysql-persistent-storage
-#   #     spec:
-#   #       accessModes: [ "ReadWriteOnce" ]
-#   #       storageClassName: local-storage
-#   #       resources:
-#   #         requests:
-#   #           storage: 5Gi
