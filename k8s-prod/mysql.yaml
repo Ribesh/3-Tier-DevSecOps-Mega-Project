@@ -110,13 +110,21 @@ spec:
         name: mysql-persistent-storage
       spec:
         accessModes: [ "ReadWriteOnce" ]
+        persistentVolumeReclaimPolicy: Delete
+        local:
+          path: /mnt/disk/vol1
         storageClassName: local-storage
         resources:
           requests:
             storage: 5Gi
-
-
-
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - worker1 
 
 # ---
 # apiVersion: v1
