@@ -81,7 +81,7 @@ spec:
         - name: initdb
           configMap:
             name: mysql-initdb-config
-        - name: mysql-storage
+        - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pvc
 
