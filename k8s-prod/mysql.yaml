@@ -81,15 +81,9 @@ spec:
         - name: initdb
           configMap:
             name: mysql-initdb-config
-  volumeClaimTemplates:
-    - metadata:
-        name: mysql-persistent-storage
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 5Gi
-        storageClassName: local-storage
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
 
 
 # ---
