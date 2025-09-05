@@ -75,9 +75,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: local-storage
+  storageClassName: local-storage11
   local:
-    path: /mnt/disks/vol1
+    path: /mnt/disks/vol1/k8-prod/k8-prod
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -100,9 +100,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: local-storage
+  storageClassName: local-storage1
   local:
-    path: /mnt/disks/vol1
+    path: /mnt/disks/vol1/k8-prod
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -161,7 +161,7 @@ spec:
         name: mysql-pv
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: local-storage
+        storageClassName: local-storage1
         resources:
           requests:
             storage: 5Gi
