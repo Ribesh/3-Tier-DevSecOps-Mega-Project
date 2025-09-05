@@ -77,7 +77,7 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage11
   local:
-    path: /mnt/disks/vol1/k8-prod/k8-prod
+    path: /mnt/disks/vol1/k8-prod
   nodeAffinity:
     required:
       nodeSelectorTerms:
