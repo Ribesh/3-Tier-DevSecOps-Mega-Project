@@ -75,7 +75,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: local-storage11
+  storageClassName: local-storage1
   local:
     path: /mnt/disks/vol1/k8-prod
   nodeAffinity:
